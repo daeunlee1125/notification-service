@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: notification-service
+
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:XE
+    username: daeunlee
+    password: 1234
+
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: kr.co.daeun.notification.dto
+  configuration:
+    map-underscore-to-camel-case: true
+    jdbc-type-for-null: 'NULL'
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    root: info
+    kr.co.daeun.notification: debug
+    org.mybatis: debug
+    java.sql: debug
+
+notification:
+  retry:
+    max-retry-count: 3
+    base-delay-seconds: 60
+  worker:
+    batch-size: 10
