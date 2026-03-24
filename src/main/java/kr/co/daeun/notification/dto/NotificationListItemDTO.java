@@ -1,4 +1,4 @@
-package kr.co.daeun.notification;
+package kr.co.daeun.notification.dto;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class NotificationListItemDTO {
-    private String notificationId;
+    private Long notificationId;
     private String eventType;
     private String channelType;
     private String recipientKey;

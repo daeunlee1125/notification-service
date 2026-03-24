@@ -1,4 +1,4 @@
-package kr.co.daeun.notification;
+package kr.co.daeun.notification.dto;
 
 import lombok.Data;
 
@@ -10,4 +10,5 @@ public class CreateNotificationReqDTO {
     private String title;
     private String body;
     private String idempotencyKey;
+    private String recipientValue;
 }

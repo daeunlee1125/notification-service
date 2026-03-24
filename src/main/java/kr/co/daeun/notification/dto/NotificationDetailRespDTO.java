@@ -1,4 +1,4 @@
-package kr.co.daeun.notification;
+package kr.co.daeun.notification.dto;
 
 import lombok.Data;
 
@@ -7,10 +7,11 @@ import java.time.LocalDateTime;
 // 알림 단건 조회
 @Data
 public class NotificationDetailRespDTO {
-    private int notificationId;
+    private Long notificationId;
     private String eventType;
     private String channelType;
     private String recipientKey;
+    private String recipientValue;
     private String title;
     private String body;
     private String status;
@@ -19,7 +20,7 @@ public class NotificationDetailRespDTO {
     private LocalDateTime nextRetryAt;
     private String lastErrorCode;
     private String lastErrorMessage;
-    private LocalDateTime requestedAt;
-    private int processingStartedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime processingStartedAt;
     private LocalDateTime sentAt;
 }

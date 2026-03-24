@@ -1,4 +1,4 @@
-package kr.co.daeun.notification;
+package kr.co.daeun.notification.dto;
 
 public class ChannelStatsRespDTO {
     private String channelType;
