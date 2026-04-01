@@ -1,7 +1,9 @@
 package kr.co.daeun.notification.dto;
 
+import kr.co.daeun.notification.type.ChannelType;
+
 public class ChannelStatsRespDTO {
-    private String channelType;
+    private ChannelType channelType;
     private int totalCnt;
     private int pendingCnt;
     private int inProgressCnt;

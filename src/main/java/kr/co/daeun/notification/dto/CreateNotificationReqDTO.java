@@ -1,11 +1,12 @@
 package kr.co.daeun.notification.dto;
 
+import kr.co.daeun.notification.type.ChannelType;
 import lombok.Data;
 
 @Data
 public class CreateNotificationReqDTO {
     private String eventType;
-    private String channelType;
+    private ChannelType channelType;
     private String recipientKey;
     private String title;
     private String body;

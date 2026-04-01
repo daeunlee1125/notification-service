@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.daeun.notification.mapper.NotificationMapper">
+
+    <insert id="insertNotification">
+        INSERT INTO NOTIFICATION
+        (event_type,
+        channel_type,
+        recipient_key,
+        recipient_value,
+        title,
+        body,
+        idempotency_key,
+        status,
+        retry_cnt)
+        values
+        (#{eventType}, #{channelType}, #{recipientKey},
+        #{recipientValue}, #{title}, #{body},
+        #{idempotencyKey}, #{status}, #{retryCnt})
+    </insert>
+
+    <select id="findByIdempotencyKey" resultType="kr.co.daeun.notification.dto.NotificationDTO">
+        SELECT * FROM NOTIFICATION
+        WHERE idempotency_key=#{idempotencyKey}
+    </select>
+
+</mapper>

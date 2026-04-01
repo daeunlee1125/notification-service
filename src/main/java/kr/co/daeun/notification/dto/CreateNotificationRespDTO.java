@@ -1,5 +1,6 @@
 package kr.co.daeun.notification.dto;
 
+import kr.co.daeun.notification.type.NotificationStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +8,6 @@ import lombok.Data;
 @Data
 public class CreateNotificationRespDTO {
     private Long notificationId;
-    private String status;
+    private NotificationStatus status;
 
 }

@@ -1,5 +1,6 @@
 package kr.co.daeun.notification.dto;
 
+import kr.co.daeun.notification.type.NotificationStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ public class NotificationListItemDTO {
     private String eventType;
     private String channelType;
     private String recipientKey;
-    private String status;
+    private NotificationStatus status;
     private int retryCnt;
     private String lastErrorCode;
     private LocalDateTime createdAt;

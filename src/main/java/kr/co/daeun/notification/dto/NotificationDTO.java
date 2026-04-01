@@ -1,5 +1,7 @@
 package kr.co.daeun.notification.dto;
 
+import kr.co.daeun.notification.type.ChannelType;
+import kr.co.daeun.notification.type.NotificationStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,12 +13,12 @@ public class NotificationDTO {
     private Long notificationId;
     private String idempotencyKey;
     private String eventType;
-    private String channelType;
+    private ChannelType channelType;
     private String recipientKey;
     private String recipientValue;
     private String title;
     private String body;
-    private String status;
+    private NotificationStatus status;
     private int retryCnt;
     private int maxRetryCnt;
     private LocalDateTime nextRetryAt;

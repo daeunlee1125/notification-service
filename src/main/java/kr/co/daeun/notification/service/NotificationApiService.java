@@ -2,8 +2,11 @@ package kr.co.daeun.notification.service;
 
 import kr.co.daeun.notification.dto.*;
 import kr.co.daeun.notification.mapper.NotificationMapper;
+import kr.co.daeun.notification.type.NotificationStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -12,36 +15,38 @@ import java.time.LocalDateTime;
 public class NotificationApiService {
     private final NotificationMapper notificationMapper;
 
+    @Transactional
     public CreateNotificationRespDTO createNotification(CreateNotificationReqDTO reqDTO) {
         validateCreateNotificationRequest(reqDTO);
 
-        if (reqDTO.getIdempotencyKey() != null && !reqDTO.getIdempotencyKey().isBlank()) {
-            Long existingNotificationId = notificationMapper.findNotificationIdByIdempotencyKey(reqDTO.getIdempotencyKey());
+        try {
+            NotificationDTO notification = NotificationDTO.builder()
+                    .eventType(reqDTO.getEventType())
+                    .channelType(reqDTO.getChannelType())
+                    .recipientKey(reqDTO.getRecipientKey())
+                    .recipientValue(reqDTO.getRecipientValue())
+                    .title(reqDTO.getTitle())
+                    .body(reqDTO.getBody())
+                    .idempotencyKey(reqDTO.getIdempotencyKey())
+                    .status(NotificationStatus.PENDING)
+                    .retryCnt(0)
+                    .build();
 
-            if (existingNotificationId != null) {
-                return CreateNotificationRespDTO.builder()
-                        .notificationId(existingNotificationId)
-                        .status("PENDING")
-                        .build();
-            }
+            notificationMapper.insertNotification(notification);
+
+            return CreateNotificationRespDTO.builder()
+                    .notificationId(notification.getNotificationId())
+                    .status(notification.getStatus())
+                    .build();
+
+        } catch (DuplicateKeyException e) {
+            NotificationDTO existing = notificationMapper.findByIdempotencyKey(reqDTO.getIdempotencyKey());
+
+            return CreateNotificationRespDTO.builder()
+                    .notificationId(existing.getNotificationId())
+                    .status(existing.getStatus())
+                    .build();
         }
-
-        NotificationDTO notification = NotificationDTO.builder()
-                .eventType(reqDTO.getEventType())
-                .channelType(reqDTO.getChannelType())
-                .recipientKey(reqDTO.getRecipientKey())
-                .recipientValue(reqDTO.getRecipientValue())
-                .title(reqDTO.getTitle())
-                .body(reqDTO.getBody())
-                .idempotencyKey(reqDTO.getIdempotencyKey())
-                .build();
-
-        notificationMapper.insertNotification(notification);
-
-        return CreateNotificationRespDTO.builder()
-                .notificationId(notification.getNotificationId())
-                .status("PENDING")
-                .build();
     }
 
     private void validateCreateNotificationRequest(CreateNotificationReqDTO reqDTO) {
@@ -51,7 +56,7 @@ public class NotificationApiService {
         if (reqDTO.getEventType() == null || reqDTO.getEventType().isBlank()) {
             throw new IllegalArgumentException("eventType required.");
         }
-        if (reqDTO.getChannelType() == null || reqDTO.getChannelType().isBlank()) {
+        if (reqDTO.getChannelType() == null) {
             throw new IllegalArgumentException("channelType required.");
         }
         if (reqDTO.getRecipientKey() == null || reqDTO.getRecipientKey().isBlank()) {

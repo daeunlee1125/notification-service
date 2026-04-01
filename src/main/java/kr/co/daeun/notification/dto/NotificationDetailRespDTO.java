@@ -1,5 +1,6 @@
 package kr.co.daeun.notification.dto;
 
+import kr.co.daeun.notification.type.ChannelType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 public class NotificationDetailRespDTO {
     private Long notificationId;
     private String eventType;
-    private String channelType;
+    private ChannelType channelType;
     private String recipientKey;
     private String recipientValue;
     private String title;
