@@ -8,11 +8,15 @@ spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521:XE
-    username: daeunlee
+    username: notification
     password: 1234
 
+  devtools:
+    restart:
+      enabled: false
+
 mybatis:
-  mapper-locations: classpath:/mapper/**/*.xml
+  mapper-locations: classpath*:mappers/**/*.xml
   type-aliases-package: kr.co.daeun.notification.dto
   configuration:
     map-underscore-to-camel-case: true
