@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,8 +68,8 @@ public class NotificationApiService {
         }
     }
 
-    public NotificationDetailRespDTO getNotificationDetail(long notificationId){
-        return null;
+    public NotificationDetailRespDTO getNotificationDetail(Long notificationId){
+        return notificationMapper.findByNotificationId(notificationId);
     }
 
     public NotificationListRespDTO getNotificationList(NotificationListSearchDTO searchDTO
@@ -77,7 +78,13 @@ public class NotificationApiService {
     }
 
     public DeliveryAttemptsRespDTO getDeliveryAttempts(long notificationId){
-        return null;
+        List<DeliveryAttemptDTO> attempts = notificationMapper.findDeliveryAttemptsByNotId(notificationId);
+
+        DeliveryAttemptsRespDTO respDTO = new DeliveryAttemptsRespDTO();
+        respDTO.setAttempts(attempts);
+        respDTO.setNotificationId(notificationId);
+
+        return respDTO;
     }
 
     public RetryNotificationRespDTO retryNotification(long notificationId, RetryNotificationReqDTO reqDTO){
