@@ -1,7 +1,11 @@
 package kr.co.daeun.notification.service;
 
 import kr.co.daeun.notification.dto.*;
+import kr.co.daeun.notification.exception.BadRequestException;
+import kr.co.daeun.notification.exception.ConflictException;
+import kr.co.daeun.notification.exception.NotFoundException;
 import kr.co.daeun.notification.mapper.NotificationMapper;
+import kr.co.daeun.notification.type.AdminActionType;
 import kr.co.daeun.notification.type.NotificationStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
@@ -52,23 +56,23 @@ public class NotificationApiService {
 
     private void validateCreateNotificationRequest(CreateNotificationReqDTO reqDTO) {
         if (reqDTO == null) {
-            throw new IllegalArgumentException("Request body required.");
+            throw new BadRequestException("Request body required.");
         }
         if (reqDTO.getEventType() == null || reqDTO.getEventType().isBlank()) {
-            throw new IllegalArgumentException("eventType required.");
+            throw new BadRequestException("eventType required.");
         }
         if (reqDTO.getChannelType() == null) {
-            throw new IllegalArgumentException("channelType required.");
+            throw new BadRequestException("channelType required.");
         }
         if (reqDTO.getRecipientKey() == null || reqDTO.getRecipientKey().isBlank()) {
-            throw new IllegalArgumentException("recipientKey required.");
+            throw new BadRequestException("recipientKey required.");
         }
         if (reqDTO.getBody() == null || reqDTO.getBody().isBlank()) {
-            throw new IllegalArgumentException("body required.");
+            throw new BadRequestException("body required.");
         }
     }
 
-    public NotificationDetailRespDTO getNotificationDetail(Long notificationId){
+    public NotificationDTO getNotificationDetail(Long notificationId){
         return notificationMapper.findByNotificationId(notificationId);
     }
 
@@ -87,11 +91,45 @@ public class NotificationApiService {
         return respDTO;
     }
 
-    public RetryNotificationRespDTO retryNotification(long notificationId, RetryNotificationReqDTO reqDTO){
+    @Transactional
+    public RetryNotificationRespDTO retryNotification(Long notificationId, RetryNotificationReqDTO reqDTO) {
+        /*
+        NotificationDTO notification = notificationMapper.findByNotificationId(notificationId);
+
+        if (notification == null) {
+            throw new NotFoundException("notification not found. id=" + notificationId);
+        }
+
+        if (notification.getStatus() != NotificationStatus.DEAD_LETTER && notification.getStatus() != NotificationStatus.RETRY_SCHEDULED) {
+            throw new ConflictException("retry not allowed for current status: " + notification.getStatus());
+        }
+
+        int updated = notificationMapper.updateStatusForManualRetry(notificationId, String.valueOf(notification.getStatus()));
+
+        if (updated == 0) {
+            throw new ConflictException("notification status changed before retry request.");
+        }
+
+        notificationMapper.insertAdminActionLog(
+                AdminActionLogDTO.builder()
+                        .notificationId(notificationId)
+                        .adminId(reqDTO != null ? reqDTO.getAdminId() : null)
+                        .actionType(String.valueOf(AdminActionType.RETRY))
+                        .actionReason(reqDTO != null ? reqDTO.getReason() : null)
+                        .build()
+        );
+
+        return RetryNotificationRespDTO.builder()
+                .notificationId(notificationId)
+                .status(NotificationStatus.PENDING)
+                .build();
+
+         */
         return null;
     }
 
     public NotificationStatsRespDTO getNotificationStats(LocalDateTime from, LocalDateTime to){
         return null;
     }
+
 }
