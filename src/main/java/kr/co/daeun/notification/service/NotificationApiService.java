@@ -93,7 +93,7 @@ public class NotificationApiService {
 
     @Transactional
     public RetryNotificationRespDTO retryNotification(Long notificationId, RetryNotificationReqDTO reqDTO) {
-        /*
+
         NotificationDTO notification = notificationMapper.findByNotificationId(notificationId);
 
         if (notification == null) {
@@ -123,9 +123,6 @@ public class NotificationApiService {
                 .notificationId(notificationId)
                 .status(NotificationStatus.PENDING)
                 .build();
-
-         */
-        return null;
     }
 
     public NotificationStatsRespDTO getNotificationStats(LocalDateTime from, LocalDateTime to){

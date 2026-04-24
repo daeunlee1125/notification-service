@@ -44,7 +44,7 @@ public class NotificationApiController {
     }
 
     @GetMapping("/{notificationId}")
-    public ResponseEntity<NotificationDetailRespDTO> getNotificationDetail(@PathVariable("notificationId") Long notificationId) {
+    public ResponseEntity<NotificationDTO> getNotificationDetail(@PathVariable("notificationId") Long notificationId) {
         return ResponseEntity.ok().body(notificationApiService.getNotificationDetail(notificationId));
     }
 
