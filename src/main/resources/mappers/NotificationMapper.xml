@@ -159,7 +159,6 @@
     <insert id="insertAdminActionLog" parameterType="kr.co.daeun.notification.dto.AdminActionLogDTO">
         INSERT INTO ADMIN_ACTION_LOG
         (
-        action_log_id,
         notification_id,
         admin_id,
         action_type,
@@ -168,7 +167,6 @@
         )
         VALUES
         (
-        #{actionLogId},
         #{notificationId},
         #{adminId},
         #{actionType},
