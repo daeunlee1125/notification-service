@@ -5,6 +5,9 @@ import kr.co.daeun.notification.type.ChannelType;
 import kr.co.daeun.notification.type.NotificationSendResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -35,8 +38,14 @@ public class EmailNotificationSender implements NotificationSender {
             mailSender.send(message);
 
             return NotificationSendResult.success();
-        } catch (Exception e) {
+        } catch (MailAuthenticationException e) {
+            return NotificationSendResult.fail("EMAIL_AUTH_FAIL", e.getMessage());
+        } catch (MailSendException e) {
             return NotificationSendResult.fail("EMAIL_SEND_FAIL", e.getMessage());
+        } catch (MailException e) {
+            return NotificationSendResult.fail("EMAIL_ERROR", e.getMessage());
+        } catch (Exception e) {
+            return NotificationSendResult.fail("EMAIL_EXCEPTION", e.getMessage());
         }
     }
 }

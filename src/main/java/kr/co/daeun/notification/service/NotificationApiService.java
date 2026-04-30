@@ -76,9 +76,28 @@ public class NotificationApiService {
         return notificationMapper.findByNotificationId(notificationId);
     }
 
-    public NotificationListRespDTO getNotificationList(NotificationListSearchDTO searchDTO
-    ) {
-        return null;
+    public NotificationListRespDTO getNotificationList(NotificationListSearchDTO searchDTO) {
+        if (searchDTO == null) {
+            searchDTO = new NotificationListSearchDTO();
+        }
+
+        if (searchDTO.getPage() == null || searchDTO.getPage() < 1) {
+            throw new BadRequestException("page must be >= 1");
+        }
+        if (searchDTO.getSize() == null || searchDTO.getSize() < 1) {
+            throw new BadRequestException("size must be >= 1");
+        }
+
+        List<NotificationListItemDTO> items = notificationMapper.getNotificationList(searchDTO);
+        int totalCnt = notificationMapper.getNotificationListTotalCnt(searchDTO);
+
+        NotificationListRespDTO respDTO = new NotificationListRespDTO();
+        respDTO.setItems(items);
+        respDTO.setPage(searchDTO.getPage());
+        respDTO.setSize(searchDTO.getSize());
+        respDTO.setTotalCnt(totalCnt);
+
+        return respDTO;
     }
 
     public DeliveryAttemptsRespDTO getDeliveryAttempts(long notificationId){
@@ -125,8 +144,28 @@ public class NotificationApiService {
                 .build();
     }
 
-    public NotificationStatsRespDTO getNotificationStats(LocalDateTime from, LocalDateTime to){
-        return null;
+    public NotificationStatsRespDTO getNotificationStats(LocalDateTime from, LocalDateTime to) {
+        if (from == null || to == null) {
+            throw new BadRequestException("from, to required.");
+        }
+        if (!from.isBefore(to)) {
+            throw new BadRequestException("from must be earlier than to.");
+        }
+
+        NotificationStatsRespDTO summary = notificationMapper.getNotificationStatsSummary(from, to);
+        List<ChannelStatsRespDTO> channelStats = notificationMapper.getChannelStats(from, to);
+
+        return NotificationStatsRespDTO.builder()
+                .from(from)
+                .to(to)
+                .totalCnt(summary.getTotalCnt())
+                .pendingCnt(summary.getPendingCnt())
+                .inProgressCnt(summary.getInProgressCnt())
+                .sentCnt(summary.getSentCnt())
+                .retryScheduledCnt(summary.getRetryScheduledCnt())
+                .deadLetterCnt(summary.getDeadLetterCnt())
+                .channelStats(channelStats)
+                .build();
     }
 
 }

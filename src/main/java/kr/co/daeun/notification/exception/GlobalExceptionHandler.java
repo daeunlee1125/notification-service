@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import kr.co.daeun.notification.dto.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -71,6 +72,22 @@ public class GlobalExceptionHandler {
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .error("INTERNAL_SERVER_ERROR")
                         .message("unexpected server error")
+                        .path(request.getRequestURI())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDTO> handleBadJson(
+            HttpMessageNotReadableException e,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDTO.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .error("BAD_REQUEST")
+                        .message("invalid request body")
                         .path(request.getRequestURI())
                         .build()
         );

@@ -1,11 +1,11 @@
 package kr.co.daeun.notification.mapper;
 
-import kr.co.daeun.notification.dto.AdminActionLogDTO;
-import kr.co.daeun.notification.dto.DeliveryAttemptDTO;
-import kr.co.daeun.notification.dto.NotificationDTO;
+import kr.co.daeun.notification.dto.*;
 import kr.co.daeun.notification.type.NotificationStatus;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -33,4 +33,12 @@ public interface NotificationMapper {
     int updateStatusForManualRetry(Long notificationId, String currentStatus);
 
     void insertAdminActionLog(AdminActionLogDTO adminActionLogDTO);
+
+    NotificationStatsRespDTO getNotificationStatsSummary(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    List<ChannelStatsRespDTO> getChannelStats(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    List<NotificationListItemDTO> getNotificationList(NotificationListSearchDTO searchDTO);
+
+    int getNotificationListTotalCnt(NotificationListSearchDTO searchDTO);
 }

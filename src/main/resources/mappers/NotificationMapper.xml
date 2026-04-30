@@ -175,4 +175,68 @@
         )
     </insert>
 
+    <select id="getNotificationStatsSummary" resultType="kr.co.daeun.notification.dto.NotificationStatsRespDTO">
+        SELECT
+        COUNT(*) AS totalCnt,
+        NVL(SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END), 0) AS pendingCnt,
+        NVL(SUM(CASE WHEN status = 'IN_PROGRESS' THEN 1 ELSE 0 END), 0) AS inProgressCnt,
+        NVL(SUM(CASE WHEN status = 'SENT' THEN 1 ELSE 0 END), 0) AS sentCnt,
+        NVL(SUM(CASE WHEN status = 'RETRY_SCHEDULED' THEN 1 ELSE 0 END), 0) AS retryScheduledCnt,
+        NVL(SUM(CASE WHEN status = 'DEAD_LETTER' THEN 1 ELSE 0 END), 0) AS deadLetterCnt
+        FROM NOTIFICATION
+        WHERE created_at &gt;= #{from}
+        AND created_at &lt; #{to}
+    </select>
+
+    <select id="getChannelStats" resultType="kr.co.daeun.notification.dto.ChannelStatsRespDTO">
+        SELECT
+        channel_type AS channelType,
+        COUNT(*) AS totalCnt,
+        NVL(SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END), 0) AS pendingCnt,
+        NVL(SUM(CASE WHEN status = 'IN_PROGRESS' THEN 1 ELSE 0 END), 0) AS inProgressCnt,
+        NVL(SUM(CASE WHEN status = 'SENT' THEN 1 ELSE 0 END), 0) AS sentCnt,
+        NVL(SUM(CASE WHEN status = 'RETRY_SCHEDULED' THEN 1 ELSE 0 END), 0) AS retryScheduledCnt,
+        NVL(SUM(CASE WHEN status = 'DEAD_LETTER' THEN 1 ELSE 0 END), 0) AS deadLetterCnt
+        FROM NOTIFICATION
+        WHERE created_at &gt;= #{from}
+        AND created_at &lt; #{to}
+        GROUP BY channel_type
+        ORDER BY channel_type
+    </select>
+
+    <select id="getNotificationList" parameterType="kr.co.daeun.notification.dto.NotificationListSearchDTO" resultType="kr.co.daeun.notification.dto.NotificationListItemDTO">
+        SELECT
+        notification_id,
+        event_type,
+        channel_type,
+        recipient_key,
+        status,
+        retry_cnt,
+        last_error_code,
+        last_error_message,
+        created_at
+        FROM NOTIFICATION
+        WHERE 1 = 1
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="channelType != null">
+            AND channel_type = #{channelType}
+        </if>
+        ORDER BY created_at DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+
+    <select id="getNotificationListTotalCnt" parameterType="kr.co.daeun.notification.dto.NotificationListSearchDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM NOTIFICATION
+        WHERE 1 = 1
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="channelType != null">
+            AND channel_type = #{channelType}
+        </if>
+    </select>
+
 </mapper>
