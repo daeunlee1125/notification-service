@@ -1,5 +1,6 @@
 package kr.co.daeun.notification.dto;
 
+import kr.co.daeun.notification.type.AdminActionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class AdminActionLogDTO {
     Long logId;
     Long notificationId;
     String adminId;
-    String actionType;
+    AdminActionType actionType;
     String actionReason;
     LocalDateTime createdAt;
 }

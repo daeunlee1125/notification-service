@@ -41,4 +41,6 @@ public interface NotificationMapper {
     List<NotificationListItemDTO> getNotificationList(NotificationListSearchDTO searchDTO);
 
     int getNotificationListTotalCnt(NotificationListSearchDTO searchDTO);
+
+    List<AdminActionLogDTO> findAdminActionsByNotificationId(Long notificationId);
 }

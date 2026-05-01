@@ -22,7 +22,6 @@ public class NotificationApiService {
 
     @Transactional
     public CreateNotificationRespDTO createNotification(CreateNotificationReqDTO reqDTO) {
-        validateCreateNotificationRequest(reqDTO);
 
         try {
             NotificationDTO notification = NotificationDTO.builder()
@@ -51,24 +50,6 @@ public class NotificationApiService {
                     .notificationId(existing.getNotificationId())
                     .status(existing.getStatus())
                     .build();
-        }
-    }
-
-    private void validateCreateNotificationRequest(CreateNotificationReqDTO reqDTO) {
-        if (reqDTO == null) {
-            throw new BadRequestException("Request body required.");
-        }
-        if (reqDTO.getEventType() == null || reqDTO.getEventType().isBlank()) {
-            throw new BadRequestException("eventType required.");
-        }
-        if (reqDTO.getChannelType() == null) {
-            throw new BadRequestException("channelType required.");
-        }
-        if (reqDTO.getRecipientKey() == null || reqDTO.getRecipientKey().isBlank()) {
-            throw new BadRequestException("recipientKey required.");
-        }
-        if (reqDTO.getBody() == null || reqDTO.getBody().isBlank()) {
-            throw new BadRequestException("body required.");
         }
     }
 
@@ -133,7 +114,7 @@ public class NotificationApiService {
                 AdminActionLogDTO.builder()
                         .notificationId(notificationId)
                         .adminId(reqDTO != null ? reqDTO.getAdminId() : null)
-                        .actionType(String.valueOf(AdminActionType.RETRY))
+                        .actionType(AdminActionType.RETRY)
                         .actionReason(reqDTO != null ? reqDTO.getReason() : null)
                         .build()
         );
@@ -165,6 +146,21 @@ public class NotificationApiService {
                 .retryScheduledCnt(summary.getRetryScheduledCnt())
                 .deadLetterCnt(summary.getDeadLetterCnt())
                 .channelStats(channelStats)
+                .build();
+    }
+
+    public AdminActionListRespDTO getAdminActions(Long notificationId) {
+        NotificationDTO notification = notificationMapper.findByNotificationId(notificationId);
+
+        if (notification == null) {
+            throw new NotFoundException("notification not found. id=" + notificationId);
+        }
+
+        List<AdminActionLogDTO> actions = notificationMapper.findAdminActionsByNotificationId(notificationId);
+
+        return AdminActionListRespDTO.builder()
+                .notificationId(notificationId)
+                .actions(actions)
                 .build();
     }
 

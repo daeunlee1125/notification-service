@@ -1,5 +1,6 @@
 package kr.co.daeun.notification.controller;
 
+import jakarta.validation.Valid;
 import kr.co.daeun.notification.dto.*;
 import kr.co.daeun.notification.service.NotificationApiService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class NotificationApiController {
     private final NotificationApiService notificationApiService;
 
     @PostMapping
-    public ResponseEntity<CreateNotificationRespDTO> createNotification(@RequestBody CreateNotificationReqDTO reqDTO) {
+    public ResponseEntity<CreateNotificationRespDTO> createNotification(@Valid @RequestBody CreateNotificationReqDTO reqDTO) {
         return ResponseEntity.ok().body(notificationApiService.createNotification(reqDTO));
     }
 
@@ -39,13 +40,20 @@ public class NotificationApiController {
     }
 
     @PostMapping("/{notificationId}/retry")
-    public ResponseEntity<RetryNotificationRespDTO> retryNotification(@PathVariable("notificationId") Long notificationId, @RequestBody RetryNotificationReqDTO reqDTO) {
+    public ResponseEntity<RetryNotificationRespDTO> retryNotification(@PathVariable("notificationId") Long notificationId, @Valid @RequestBody RetryNotificationReqDTO reqDTO) {
         return ResponseEntity.ok().body(notificationApiService.retryNotification(notificationId, reqDTO));
     }
 
     @GetMapping("/{notificationId}")
     public ResponseEntity<NotificationDTO> getNotificationDetail(@PathVariable("notificationId") Long notificationId) {
         return ResponseEntity.ok().body(notificationApiService.getNotificationDetail(notificationId));
+    }
+
+    @GetMapping("/{notificationId}/admin-actions")
+    public ResponseEntity<AdminActionListRespDTO> getAdminActions(
+            @PathVariable("notificationId") Long notificationId
+    ) {
+        return ResponseEntity.ok(notificationApiService.getAdminActions(notificationId));
     }
 
 }

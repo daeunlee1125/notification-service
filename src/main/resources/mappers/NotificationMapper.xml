@@ -239,4 +239,18 @@
         </if>
     </select>
 
+    <select id="findAdminActionsByNotificationId"
+            resultType="kr.co.daeun.notification.dto.AdminActionLogDTO">
+        SELECT
+            log_id,
+            notification_id,
+            admin_id,
+            action_type,
+            action_reason,
+            created_at
+        FROM ADMIN_ACTION_LOG
+        WHERE notification_id = #{notificationId}
+        ORDER BY created_at DESC
+    </select>
+
 </mapper>
