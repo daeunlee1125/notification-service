@@ -6,6 +6,7 @@ import kr.co.daeun.notification.service.NotificationApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class NotificationApiController {
 
     @GetMapping("/stats")
     public ResponseEntity<NotificationStatsRespDTO>  getNotificationStats(@RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from, @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
-        return ResponseEntity.ok().body(notificationApiService.getNotificationStats(from, to));
+        return ResponseEntity.status(HttpStatus.CREATED).body(notificationApiService.getNotificationStats(from, to));
     }
 
     @GetMapping("/{notificationId}/attempts")

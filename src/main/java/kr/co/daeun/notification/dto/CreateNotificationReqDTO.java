@@ -1,6 +1,7 @@
 package kr.co.daeun.notification.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import kr.co.daeun.notification.type.ChannelType;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ public class CreateNotificationReqDTO {
 
     @NotBlank(message = "eventType required.")
     private String eventType;
-    @NotBlank(message = "channelType required.")
+    @NotNull(message = "channelType required.")
     private ChannelType channelType;
     @NotBlank(message = "recipientKey required.")
     private String recipientKey;
