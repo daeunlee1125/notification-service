@@ -33,7 +33,7 @@ public class NotificationApiController {
 
     @GetMapping("/stats")
     public ResponseEntity<NotificationStatsRespDTO>  getNotificationStats(@RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from, @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
-        return ResponseEntity.ok().body(notificationApiService.getNotificationStats(from, to));
+        return ResponseEntity.status(HttpStatus.CREATED).body(notificationApiService.getNotificationStats(from, to));
     }
 
     @GetMapping("/{notificationId}/attempts")

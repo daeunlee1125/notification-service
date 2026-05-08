@@ -1,5 +1,6 @@
 package kr.co.daeun.notification.controller;
 
+import kr.co.daeun.notification.controller.NotificationApiController;
 import kr.co.daeun.notification.exception.GlobalExceptionHandler;
 import kr.co.daeun.notification.service.NotificationApiService;
 import org.junit.jupiter.api.Test;
