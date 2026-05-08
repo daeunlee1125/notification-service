@@ -6,11 +6,13 @@ import kr.co.daeun.notification.service.NotificationApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class NotificationApiController {
 
     @PostMapping
     public ResponseEntity<CreateNotificationRespDTO> createNotification(@Valid @RequestBody CreateNotificationReqDTO reqDTO) {
-        return ResponseEntity.ok().body(notificationApiService.createNotification(reqDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(notificationApiService.createNotification(reqDTO));
     }
 
     @GetMapping

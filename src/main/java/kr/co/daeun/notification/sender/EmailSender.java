@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmailNotificationSender implements NotificationSender {
+public class EmailSender implements NotificationSender {
 
     private final JavaMailSender mailSender;
 
