@@ -1,7 +1,7 @@
 # Notification Service
 
-비즈니스 이벤트를 입력으로 받아 알림 요청을 저장하고, 비동기 워커를 통해 채널별로 발송하는 알림 처리 서버입니다.  
-실패, 재시도, 중복 방지, 상태 추적, 운영자 재처리 기능을 구현했습니다.
+비즈니스 이벤트를 입력으로 받아 알림 요청을 저장하고, 비동기 워커를 통해 채널별 발송을 처리하는 알림 서버입니다.
+외부 채널 실패를 고려해 retry/backoff, idempotency, 상태 추적, delivery attempt 기록, 운영자 재처리 기능을 구현했습니다.
 
 ## 핵심 기능
 - 알림 요청 저장 API
@@ -28,8 +28,8 @@
         [Notification Worker]
               ↓
  [NotificationSenderResolver]
-      ↓         ↓         ↓
-   Email     SMS Mock   Push Mock
+      ↓         ↓          ↓
+    Email    Solapi SMS   Push Mock
 ```
 
 ## ERD
