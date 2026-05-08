@@ -71,3 +71,8 @@ DEAD_LETTER / RETRY_SCHEDULED → PENDING
 - idempotency 검증
 
 ## 실행 화면
+
+<img width="1033" height="645" alt="image" src="https://github.com/user-attachments/assets/2054d85b-9958-40da-88a6-e5333c7c5f4a" />
+<img width="1032" height="546" alt="image" src="https://github.com/user-attachments/assets/d6fea6fe-5b14-440b-85f1-4df7022452dc" />
+
+
