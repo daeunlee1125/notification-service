@@ -16,6 +16,9 @@
 - Frontend: React
 - Channel: Email, Solapi SMS, Push Mock
 
+## Related Repository
+- Admin Console Frontend: [notification-admin](https://github.com/daeunlee1125/notification-admin)
+
 ## 시스템 구조
 
 ```text
